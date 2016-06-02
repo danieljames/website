@@ -7,15 +7,17 @@
   float: right;
   vertical-align: top;
   padding: 1.5em 1.5em 1.5em 0em;
+  width: 16em;
 }
 #sidebar #menu {
-  width: 16em;
   margin: 0em 0em 1.5em 0em;
   overflow: hidden;
+  /* Use position:relative so that span.link can be absolutely positioned */
+  position: relative;
 }
 #sidebar #search {
-  width: 16em;
-  margin: 0em 0em 0.5em 0em;
+  max-width: 16em;
+  margin: 0em auto 0.5em auto;
 }
 
 /**** The menus... ****/
@@ -60,28 +62,24 @@
 #sidebar #menu ul li ul li a {
   padding-left: 0.25em;
   display: block;
-  width: 15em;
   margin-left: 4px;
   margin-right: 4px;
 }
 #sidebar #menu ul li ul li ul li a {
   padding-left: 1.25em;
-  width: 14em;
 }
 #sidebar #menu ul li ul li ul li ul li a {
   padding-left: 2.25em;
-  width: 13em;
 }
 #sidebar #menu ul li ul li ul li ul li ul li a {
   padding-left: 3.25em;
-  width: 12em;
 }
 #sidebar #menu a span.link {
   color: #DDDDDD;
   font-family: sans-serif;
   font-weight: bold;
   position: absolute;
-  right: 2.25em;
+  right: 0.75em;
 }
 
 /**** RSS feed menus ****/
