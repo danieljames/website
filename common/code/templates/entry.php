@@ -6,7 +6,7 @@
   <title><?php echo $full_title_xml ?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="icon" href="/favicon.ico" type="image/ico" />
-  <link rel="stylesheet" type="text/css" href="/style-v2/section-boost.css" />
+  <link rel="stylesheet" type="text/css" href="/generated/css/section-boost.css" />
 <?php echo $history_style ?>
 
   <!--[if IE 7]> <style type="text/css"> body { behavior: url(/style-v2/csshover3.htc); } </style> <![endif]-->

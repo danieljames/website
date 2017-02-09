@@ -19,7 +19,7 @@ class BoostFilterBasic extends BoostFilter
 
             echo $this->alter_title(substr($text, 0, $match[0][1]));
             echo '<link rel="icon" href="/favicon.ico" type="image/ico"'.$tag_end;
-            echo '<link rel="stylesheet" type="text/css" href="/style-v2/section-basic.css"'.$tag_end;
+            echo '<link rel="stylesheet" type="text/css" href="/generated/css/section-basic.css"'.$tag_end;
             echo $match[0][0];
             virtual("/common/heading-doc.html");
             echo latest_link($this->data);

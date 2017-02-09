@@ -5,7 +5,7 @@
 <head>
   <?php echo $_file['head']; ?>
   <link rel="icon" href="/favicon.ico" type="image/ico" />
-  <link rel="stylesheet" type="text/css" href="/style-v2/section-doc.css" />
+  <link rel="stylesheet" type="text/css" href="/generated/css/section-doc.css" />
   <!--[if IE 7]> <style type="text/css"> body { behavior: url(/style-v2/csshover3.htc); } </style> <![endif]-->
 
 </head>

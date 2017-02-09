@@ -19,7 +19,7 @@ class BoostFilterBoostBookBasic extends BoostFilter
         $pos4 = strpos($text, '<div class="spirit-nav">', $pos3);
         echo $this->alter_title(substr($text, 0, $pos1));
         echo '<link rel="icon" href="/favicon.ico" type="image/ico"/>';
-        echo '<link rel="stylesheet" type="text/css" href="/style-v2/section-basic.css"/>';
+        echo '<link rel="stylesheet" type="text/css" href="/generated/css/section-basic.css"/>';
         echo substr($text, $pos1, $pos3 - $pos1);
         virtual("/common/heading-doc.html");
         echo latest_link($this->data);
