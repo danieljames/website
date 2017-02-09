@@ -7,6 +7,12 @@
 */
 
 class BoostUrl {
+
+static function is_absolute($url) {
+    $url_parts = parse_url($url);
+    return array_key_exists('scheme', $url_parts) || array_key_exists('host', $url_parts);
+}
+
 // Not a full implementation.
 static function resolve($url, $base = null) {
     if (!$base) {
