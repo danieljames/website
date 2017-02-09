@@ -31,7 +31,7 @@ function generate_css_file($path) {
     file_put_contents($trampoline_path, "@import url({$hashed_path});\n");
 }
 
-function load_css($path, $parents = []) {
+function load_css($path, $parents = array()) {
     assert($path[0] === '/');
     $realpath = realpath(BOOST_WEBSITE_DATA_ROOT_DIR.$path);
     if (!$realpath) { my_error("{$path}: Missing file"); }
@@ -67,7 +67,7 @@ function load_css($path, $parents = []) {
         $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
     if (!$match_result) { my_error("{$path}: Parse error"); }
 
-    $result = [];
+    $result = array();
     $offset = 0;
     foreach ($matches as $match) {
         if ($match[0][1] > $offset) {
