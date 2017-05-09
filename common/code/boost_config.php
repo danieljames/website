@@ -53,6 +53,15 @@ BOOST_TASKS_DIR
   implementation is the only thing of interest.
   - Defaults to BOOST_WEBSITE_SHARED_DIR/tasks
 
+BOOST_BOT_SERVER_NAME
+  Base URL of bot website, such as http://www.boost.org/
+  - No default
+
+BOOST_BOT_GITHUB_CLIENT_ID
+BOOST_BOT_GITHUB_CLIENT_SECRET
+  GitHub OAuth details, found under the 'OAuth Apps' in developer settings for the
+  commitbot github user.
+
 EXECUTABLES
 ===========
 
