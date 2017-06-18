@@ -3587,6 +3587,11 @@
     <category>Miscellaneous</category>
   </library>
   <library>
+    <key>tr1</key>
+    <update-version>1.65.0</update-version>
+    <status>removed</status>
+  </library>
+  <library>
     <key>tti</key>
     <library_path>libs/tti/</library_path>
     <boost-version>1.54.0</boost-version>
