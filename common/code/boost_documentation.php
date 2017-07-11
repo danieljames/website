@@ -119,6 +119,8 @@ class BoostDocumentation
         }
 
         // Only use a permanent redirect for releases (beta or full).
+        // TODO: Only use 301 when it's properly released
+        //       (data is in generated/state/release.txt, but inconvenient).
 
         $redirect_status_code = $this->version &&
             $this->version->is_numbered_release() ? 301 : 302;
