@@ -133,11 +133,8 @@ class BoostReleases {
 
         // If there is going to be another release of this base version, then
         // create dev data if we don't already have any.
-        // TODO: prerelease is wrong after a beta. Maybe just use the base
-        // version?
         if (!$dev_data && (!$release_version || !$release_version->is_final_release())) {
-            $dev_data = $this->default_release_data($release_name,
-                    BoostVersion::from("{$version->base_version()} prerelease"));
+            $dev_data = $this->default_release_data($release_name, $version);
         }
 
         $result = array();

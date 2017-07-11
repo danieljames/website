@@ -30,10 +30,6 @@ class BoostVersion {
     /** release_stage for anything that isn't linked to a numbered release */
     const release_stage_null = 0;
 
-    /** release_stage for a version before it has entered into the release
-        process */
-    const release_stage_prerelease = 1;
-
     /** release_stage for beta releases */
     const release_stage_beta = 2;
 
@@ -65,15 +61,6 @@ class BoostVersion {
             'release_stage' => $beta ?
                 self::release_stage_beta : self::release_stage_final,
             'extra' => $beta ?: 0,
-        ));
-    }
-
-    static function prerelease($major, $minor, $point) {
-        return new BoostVersion(Array(
-            'major' => $major,
-            'minor' => $minor,
-            'point' => $point,
-            'release_stage' => self::release_stage_prerelease,
         ));
     }
 
@@ -130,16 +117,14 @@ class BoostVersion {
             case 'unreleased': return self::unreleased();
         }
 
-        if (preg_match('@^(\d+)[._](\d+)[._](\d+)[-._ ]?(?:(b(?:eta)?[- _.]*)(\d*)|(prerelease))?$@', $version_string, $matches))
+        if (preg_match('@^(\d+)[._](\d+)[._](\d+)[-._ ]?(?:(b(?:eta)?[- _.]*)(\d*))?$@', $version_string, $matches))
         {
             return new BoostVersion(Array(
                 'major' => (int) $matches[1],
                 'minor' => (int) $matches[2],
                 'point' => (int) $matches[3],
                 'release_stage' =>
-                    !empty($matches[4]) ? self::release_stage_beta : (
-                    !empty($matches[6]) ? self::release_stage_prerelease :
-                    self::release_stage_final),
+                    !empty($matches[4]) ? self::release_stage_beta : self::release_stage_final,
                 'extra' => empty($matches[4]) ? false :
                     (int) ($matches[5] ?: 1),
             ));
@@ -185,7 +170,7 @@ class BoostVersion {
 
     /**
      * Is this a numbered release version?
-     * Includes prerelease, beta, etc.
+     * Includes beta, etc.
      * @return boolean
      */
     function is_numbered_release() {
@@ -207,7 +192,7 @@ class BoostVersion {
 
     /**
      * Is this a final release?
-     * Not prerelease, beta etc.
+     * Not beta etc.
      * @return boolean
      */
     function is_final_release() {
@@ -227,7 +212,7 @@ class BoostVersion {
     /**
      * Is this an unreleased library?
      *
-     * Perhaps a bit confused, as it does not include prerelease or beta
+     * Perhaps a bit confused, as it does not include beta
      * versions.
      */
     function is_unreleased() {
@@ -259,9 +244,6 @@ class BoostVersion {
             case self::release_stage_beta:
                 $r .= ' beta'. $this->version['extra'];
                 break;
-            case self::release_stage_prerelease:
-                $r .= ' prerelease';
-                break;
             }
             return $r;
         }
@@ -272,7 +254,6 @@ class BoostVersion {
      *
      * Doesn't work for beta versions, as they're not consistent enough.
      * Some examples: boost_1_54_0_beta, boost_1_55_0b1, boost_1_56_0_b1.
-     * Also doesn't work for prerelease, as it doesn't have any documentation.
      */
     function dir() {
         return $this->version['stage'] ? $this->stage_name() :
@@ -297,10 +278,8 @@ class BoostVersion {
             implode('.', $this->version_numbers());
     }
 
-    /** Return the git tag/branch for the version.
-        Doesn't work for prerelease stage as it doesn't have a tag */
+    /** Return the git tag/branch for the version. */
     function git_ref() {
-        assert($this->version['release_stage'] != self::release_stage_prerelease);
         return $this->version['stage'] ? $this->stage_name() :
             'boost-'.implode('.', $this->version_numbers()).
             ($this->is_beta() ? '-beta'. $this->version['extra'] : '');
