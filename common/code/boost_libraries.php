@@ -359,8 +359,10 @@ class BoostLibraries
                     continue;
                 }
 
+                // Update versions from later stages in a release.
                 $lib_version = BoostVersion::from($lib_details['boost-version']);
-                if ($version->release_stage() > $lib_version->release_stage())
+                if ($lib_version->is_rc() ? !$version->is_rc() :
+                    ($lib_version->is_beta() ? $version->is_final_release()))
                 {
                     $lib_details['boost-version'] = $version;
                 }

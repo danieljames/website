@@ -24,17 +24,8 @@ class BoostVersion {
     /** Unreleased libraries (should only be used in 'boost-version' field) */
     const unreleased_stage = 4;
 
-    /** release_stage for development stages (master, develop etc.) */
-    const release_stage_development = 0;
-
-    /** release_stage for anything that isn't linked to a numbered release */
-    const release_stage_null = 0;
-
-    /** release_stage for beta releases */
-    const release_stage_beta = 2;
-
-    /** release_stage for the final releases */
-    const release_stage_final = 3;
+    /** value for not a beta/rc */
+    const candidate_final = 999;
 
     /** The version number */
     private $version = Array(
@@ -42,9 +33,8 @@ class BoostVersion {
         'major' => 0,
         'minor' => 0,
         'point' => 0,
-        'release_stage' => 0,
-        'beta' => 0,
-        'rc' => 999,
+        'beta' => self::candidate_final,
+        'rc' => self::candidate_final,
     );
 
     /** The current release version. */
@@ -64,10 +54,8 @@ class BoostVersion {
             'major' => $major,
             'minor' => $minor,
             'point' => $point,
-            'release_stage' => $beta ?
-                self::release_stage_beta : self::release_stage_final,
-            'beta' => $beta ?: 0,
-            'rc' => $rc ?: 999,
+            'beta' => $beta ?: self::candidate_final,
+            'rc' => $rc ?: self::candidate_final,
         ));
     }
 
@@ -126,16 +114,13 @@ class BoostVersion {
 
         if (preg_match('@^(\d+)[._](\d+)[._](\d+)[-._ ]?(?:(b(?:eta)?[- _.]*)(\d*))?(?:[-._ ]?(rc[- _.]*)(\d*))?$@', $version_string, $matches))
         {
-            // TODO: Using false for beta here, 0 elsewhere.
             return new BoostVersion(Array(
                 'major' => (int) $matches[1],
                 'minor' => (int) $matches[2],
                 'point' => (int) $matches[3],
-                'release_stage' =>
-                    !empty($matches[4]) ? self::release_stage_beta : self::release_stage_final,
-                'beta' => empty($matches[4]) ? false :
+                'beta' => empty($matches[4]) ? self::candidate_final :
                     (int) ($matches[5] ?: 1),
-                'rc' => empty($matches[6]) ? 999 :
+                'rc' => empty($matches[6]) ? self::candidate_final :
                     (int) ($matches[7] ?: 1),
             ));
         }
@@ -167,7 +152,7 @@ class BoostVersion {
      */
     function is_beta() {
         return $this->version['stage'] === self::release_stage &&
-            $this->version['release_stage'] === self::release_stage_beta;
+            $this->version['beta'] != self::candidate_final;
     }
 
     /**
@@ -188,26 +173,13 @@ class BoostVersion {
     }
 
     /**
-     * The stage of the release.
-     *
-     * Not sure about this, this value wasn't mean to be public, but it's
-     * needed for updating the documentation list. Maybe would have been better
-     * to supply a comparison method?
-     * @return int
-     */
-    function release_stage() {
-        return $this->version['release_stage'];
-
-    }
-
-    /**
      * Is this a final release?
      * Not beta etc.
      * @return boolean
      */
     function is_final_release() {
         return $this->version['stage'] === self::release_stage &&
-            $this->version['release_stage'] === self::release_stage_final;
+            $this->version['beta'] === self::candidate_final;
     }
 
     /**
@@ -250,12 +222,10 @@ class BoostVersion {
         }
         else {
             $r = implode('.', $this->version_numbers());
-            switch ($this->version['release_stage']) {
-            case self::release_stage_beta:
+            if ($this->version['beta'] != self::candidate_final) {
                 $r .= ' beta'. $this->version['beta'];
-                break;
             }
-            if ($this->version['rc'] != 999) {
+            if ($this->version['rc'] != self::candidate_final) {
                 $r .= ' rc'. $this->version['rc'];
             }
             return $r;
