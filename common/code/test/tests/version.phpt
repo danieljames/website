@@ -133,3 +133,12 @@ Assert::same($boost_1_56_0_rc1->compare('1.56.0.rc1'), 0);
 
 Assert::same($boost_1_55_0->git_ref(), 'boost-1.55.0');
 Assert::same($boost_1_56_0_b1->git_ref(), 'boost-1.56.0-beta1');
+
+Assert::false($boost_1_56_0_b1_rc1->is_final_release());
+Assert::false($boost_1_56_0_b1->is_final_release());
+Assert::false($boost_1_56_0_b2_rc1->is_final_release());
+Assert::false($boost_1_56_0_b2_rc2->is_final_release());
+Assert::false($boost_1_56_0_b2->is_final_release());
+Assert::false($boost_1_56_0_rc1->is_final_release());
+Assert::false($boost_1_56_0_rc2->is_final_release());
+Assert::true($boost_1_56_0->is_final_release());

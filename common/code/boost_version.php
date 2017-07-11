@@ -164,8 +164,18 @@ class BoostVersion {
     }
 
     /**
+     * Is this a release candidate?
+     * @return boolean
+     */
+    function is_rc() {
+        return $this->version['stage'] === self::release_stage &&
+            $this->version['rc'] != self::candidate_final;
+    }
+
+    /**
      * Is this a numbered release version?
-     * Includes beta, etc.
+     * Includes beta, rc etc.
+     *
      * @return boolean
      */
     function is_numbered_release() {
@@ -179,7 +189,8 @@ class BoostVersion {
      */
     function is_final_release() {
         return $this->version['stage'] === self::release_stage &&
-            $this->version['beta'] === self::candidate_final;
+            $this->version['beta'] === self::candidate_final &&
+            $this->version['rc'] === self::candidate_final;
     }
 
     /**
@@ -237,6 +248,8 @@ class BoostVersion {
      *
      * Doesn't work for beta versions, as they're not consistent enough.
      * Some examples: boost_1_54_0_beta, boost_1_55_0b1, boost_1_56_0_b1.
+     *
+     * Release candidates have the same directory as the proper release.
      */
     function dir() {
         return $this->version['stage'] ? $this->stage_name() :
@@ -254,7 +267,7 @@ class BoostVersion {
 
     /**
      * The version number without release stage info
-     * (i.e. no beta info).
+     * (i.e. no beta, rc info).
      */
     function base_version() {
         return $this->version['stage'] ? $this->stage_name() :
@@ -265,7 +278,8 @@ class BoostVersion {
     function git_ref() {
         return $this->version['stage'] ? $this->stage_name() :
             'boost-'.implode('.', $this->version_numbers()).
-            ($this->is_beta() ? '-beta'. $this->version['beta'] : '');
+            ($this->is_beta() ? '-beta'. $this->version['beta'] : '').
+            ($this->is_rc() ? '-rc'. $this->version['rc'] : '');
     }
 
     /** Return the version numbers from the version array */
