@@ -43,7 +43,8 @@ class BoostVersion {
         'minor' => 0,
         'point' => 0,
         'release_stage' => 0,
-        'extra' => 0,
+        'beta' => 0,
+        'rc' => 999,
     );
 
     /** The current release version. */
@@ -54,13 +55,19 @@ class BoostVersion {
     }
 
     static function release($major, $minor, $point, $beta = false) {
+        $rc = false;
+        if (is_array($beta)) {
+            $rc = BoostWebsite::array_get($beta, 'rc', false);
+            $beta = BoostWebsite::array_get($beta, 'beta', false);
+        }
         return new BoostVersion(Array(
             'major' => $major,
             'minor' => $minor,
             'point' => $point,
             'release_stage' => $beta ?
                 self::release_stage_beta : self::release_stage_final,
-            'extra' => $beta ?: 0,
+            'beta' => $beta ?: 0,
+            'rc' => $rc ?: 999,
         ));
     }
 
@@ -117,16 +124,19 @@ class BoostVersion {
             case 'unreleased': return self::unreleased();
         }
 
-        if (preg_match('@^(\d+)[._](\d+)[._](\d+)[-._ ]?(?:(b(?:eta)?[- _.]*)(\d*))?$@', $version_string, $matches))
+        if (preg_match('@^(\d+)[._](\d+)[._](\d+)[-._ ]?(?:(b(?:eta)?[- _.]*)(\d*))?(?:[-._ ]?(rc[- _.]*)(\d*))?$@', $version_string, $matches))
         {
+            // TODO: Using false for beta here, 0 elsewhere.
             return new BoostVersion(Array(
                 'major' => (int) $matches[1],
                 'minor' => (int) $matches[2],
                 'point' => (int) $matches[3],
                 'release_stage' =>
                     !empty($matches[4]) ? self::release_stage_beta : self::release_stage_final,
-                'extra' => empty($matches[4]) ? false :
+                'beta' => empty($matches[4]) ? false :
                     (int) ($matches[5] ?: 1),
+                'rc' => empty($matches[6]) ? 999 :
+                    (int) ($matches[7] ?: 1),
             ));
         }
         else
@@ -165,7 +175,7 @@ class BoostVersion {
      * @return boolean|number
      */
     function beta_number() {
-        return $this->is_beta() ? $this->version['extra'] : false;
+        return $this->is_beta() ? $this->version['beta'] : false;
     }
 
     /**
@@ -242,8 +252,11 @@ class BoostVersion {
             $r = implode('.', $this->version_numbers());
             switch ($this->version['release_stage']) {
             case self::release_stage_beta:
-                $r .= ' beta'. $this->version['extra'];
+                $r .= ' beta'. $this->version['beta'];
                 break;
+            }
+            if ($this->version['rc'] != 999) {
+                $r .= ' rc'. $this->version['rc'];
             }
             return $r;
         }
@@ -258,7 +271,7 @@ class BoostVersion {
     function dir() {
         return $this->version['stage'] ? $this->stage_name() :
             'boost_'.implode('_', $this->version_numbers()).
-            ($this->is_beta() ? '_beta'. $this->version['extra'] : '');
+            ($this->is_beta() ? '_beta'. $this->version['beta'] : '');
     }
 
     /**
@@ -282,7 +295,7 @@ class BoostVersion {
     function git_ref() {
         return $this->version['stage'] ? $this->stage_name() :
             'boost-'.implode('.', $this->version_numbers()).
-            ($this->is_beta() ? '-beta'. $this->version['extra'] : '');
+            ($this->is_beta() ? '-beta'. $this->version['beta'] : '');
     }
 
     /** Return the version numbers from the version array */
