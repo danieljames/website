@@ -837,6 +837,10 @@ class BoostPages_Page {
                 return $this->release_data['release_status'];
             }
 
+            if ($this->release_data['version']->is_rc()) {
+                return 'dev';
+            }
+
             if ($this->release_data['version']->is_numbered_release()) {
                 return $this->release_data['version']->is_beta() ? 'beta' : 'released';
             }
