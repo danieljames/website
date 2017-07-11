@@ -584,7 +584,6 @@ class BoostLibraries
     }
 
     static function filter_visible($x) {
-        if ($x['boost-version']->is_hidden()) { return false; }
         if (in_array(BoostWebsite::array_get($x, 'status'),
                 array('hidden', 'unreleased', 'removed')))
         {

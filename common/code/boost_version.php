@@ -24,9 +24,6 @@ class BoostVersion {
     /** Unreleased libraries (should only be used in 'boost-version' field) */
     const unreleased_stage = 4;
 
-    /** Hidden libraries (should only be used in 'boost-version' field) */
-    const hidden_stage = 5;
-
     /** release_stage for development stages (master, develop etc.) */
     const release_stage_development = 0;
 
@@ -96,10 +93,6 @@ class BoostVersion {
         return new BoostVersion(Array('stage' => self::unreleased_stage));
     }
 
-    static function hidden() {
-        return new BoostVersion(Array('stage' => self::hidden_stage));
-    }
-
     /**
      * Returns a BoostVersion representation of the argument.
      * If the argument is a BoostVersion, returns it (not a clone).
@@ -135,7 +128,6 @@ class BoostVersion {
             case 'develop': return self::develop();
             case 'latest': return self::latest();
             case 'unreleased': return self::unreleased();
-            case 'hidden': return self::hidden();
         }
 
         if (preg_match('@^(\d+)[._](\d+)[._](\d+)[-._ ]?(?:(b(?:eta)?[- _.]*)(\d*)|(prerelease))?$@', $version_string, $matches))
@@ -225,7 +217,7 @@ class BoostVersion {
 
     /**
      * Is this a valid update version (including develop/master/latest).
-     * i.e. update-version can't be unreleased or hidden.
+     * i.e. update-version can't be unreleased.
      * @return boolean
      */
     function is_update_version() {
@@ -240,15 +232,6 @@ class BoostVersion {
      */
     function is_unreleased() {
         return $this->version['stage'] === self::unreleased_stage;
-    }
-
-    /**
-     * Is this a hidden version? (Used in boost-version for libraries
-     * that shouldn't be publically listed. A bit of a hack that I'm
-     * somewhat regretting).
-     */
-    function is_hidden() {
-        return $this->version['stage'] === self::hidden_stage;
     }
 
     /**
@@ -335,7 +318,6 @@ class BoostVersion {
             case self::develop_stage: return 'develop';
             case self::latest_stage: return 'latest';
             case self::unreleased_stage: return 'unreleased';
-            case self::hidden_stage: return 'hidden';
             default: assert(false);
         }
     }

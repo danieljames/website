@@ -15,7 +15,6 @@ function main() {
     $libraries = BoostLibraries::load();
     $libs = $libraries->get_for_version('master', null, function($lib) {
         return !$lib['boost-version']->is_final_release() &&
-            !$lib['boost-version']->is_hidden() &&
             BoostWebsite::array_get($lib, 'status') != 'hidden' &&
             BoostWebsite::array_get($lib, 'status') != 'unreleased';
     });

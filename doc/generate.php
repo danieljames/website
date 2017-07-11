@@ -96,8 +96,7 @@ class LibrariesHtm {
         if (!$version->is_numbered_release()) {
             $index = 0;
             foreach ($alphabetic as $library) {
-                if (!$library['boost-version']->is_final_release() &&
-                    !$library['boost-version']->is_hidden())
+                if (!$library['boost-version']->is_final_release())
                 {
                     $params['unreleased_libs'][] = $this->rewrite_library($library, $index++);
                 }

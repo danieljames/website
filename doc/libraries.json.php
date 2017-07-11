@@ -11,15 +11,6 @@ function libraries_json($params) {
 
     $version_libs = array_map(
         function($lib) {
-            // TODO: Better handling of hidden libraries.
-            if (!empty($lib['boost-version']) &&
-                $lib['boost-version']->is_hidden() &&
-                empty($lib['status'])
-            ) {
-                $lib['status'] = 'hidden';
-                unset($lib['boost-version']);
-            }
-
             $r = new BoostLibrary($lib);
             return $r;
         },
